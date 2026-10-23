@@ -29,33 +29,44 @@ Our Enterprise Stress-Test simulating a massive open-world deployment generated 
 ---
 
 ## 🏗️ Architecture Layout
-[Player Input + Spatial Tag]
-|
-v (HTTP POST /api/respond)
-+-------------------------------------------------------+
-| FastAPI Web Gateway (Asynchronous Event Loop)         |
-+-------------------------------------------------------+
-|
-+---> [1. Semantic Cache Check (~7μs)] -------> (Hit) ---> [Stream Cached Reply]
-|                                                             |
-v (Miss)                                                      |
-+-------------------------------------------------------+               |
-|  2. CUDA Matrix Search & Spatial Filter (<1.4ms)       |               |
-+-------------------------------------------------------+               |
-|                                                             |
-v [Extracted NPC Profile + Lore]                              |
-+-------------------------------------------------------+               |
-|  3. Qwen2.5-7B 4-bit Quantized Inference Engine      |               |
-|     (TextIteratorStreamer Async Thread)               |               |
-+-------------------------------------------------------+               |
-|                                                             |
-v [Parsed JSON Stream: Tokens + Game Actions]                 |
-+-------------------------------------------------------+               |
-|  4. Server-Sent Events (SSE) Response Pipeline        | <-------------+
-+-------------------------------------------------------+
-|
-v (Streamed JSON Chunks)
-[Unreal Engine 5 / Unity UI and Gameplay Blueprint]
+
+```text
+       [Player Input + Spatial Tag]
+                     |
+                     v (HTTP POST /api/respond)
+  +-------------------------------------------------------+
+
+  | FastAPI Web Gateway (Asynchronous Event Loop)         |
+  +-------------------------------------------------------+
+                     |
+                     +---> [1. Semantic Cache Check (~7μs)] -------> (Hit) ---> [Stream Cached Reply]
+
+                     |                                                             |
+                     v (Miss)                                                      |
+  +-------------------------------------------------------+                        |
+
+  | 2. CUDA Matrix Search & Spatial Filter (<1.4ms)       |                        |
+  +-------------------------------------------------------+                        |
+
+                     |                                                             |
+                     v [Extracted NPC Profile + Lore]                              |
+  +-------------------------------------------------------+                        |
+
+  | 3. Qwen2.5-7B 4-bit Quantized Inference Engine       |                        |
+  |    (TextIteratorStreamer Async Thread)                |                        |
+  +-------------------------------------------------------+                        |
+
+                     |                                                             |
+                     v [Parsed JSON Stream: Tokens + Game Actions]                 |
+  +-------------------------------------------------------+                        |
+
+  | 4. Server-Sent Events (SSE) Response Pipeline         | <---------------------+
+  +-------------------------------------------------------+
+                     |
+                     v (Streamed JSON Chunks)
+   [Unreal Engine 5 / Unity UI and Gameplay Blueprint]
+```
+
 ---
 
 ## 🚀 One-Click Kaggle / Jupyter Quickstart
