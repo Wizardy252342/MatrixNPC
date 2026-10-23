@@ -5,7 +5,7 @@ MatrixNPC is a high-performance, asynchronous middleware architecture designed t
 By utilizing **Qwen2.5-7B-Instruct (4-bit NF4)**, tensor-accelerated vector search, and hybrid semantic caching, MatrixNPC eliminates the classic AI inference bottleneck (2.5s+ latency), dropping the Time-to-First-Token (TTFT) to an unnoticeable **30–50ms**.
 
 ---
-
+ 
 ## ⚡ Performance Benchmarks (Executed on a Single NVIDIA T4 GPU)
 
 Our Enterprise Stress-Test simulating a massive open-world deployment generated the following precise metrics:
